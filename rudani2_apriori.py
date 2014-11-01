@@ -220,23 +220,23 @@ def func_Purity(allTopicFreqPattern,indx,dtList,outputPurityFileName,dictVocab):
                         maxLogTerm = float(tempMaxLogTerm)
             firstfactor = float(f_t_p)/float(d_t)
             purity = math.log(float(firstfactor)) - math.log(float(maxLogTerm))
-            #purtiy_support_combine = (float(purity) * float(1 + f_t_p))
-            tempTopicPurityList.append([round(purity,4),f_t_p,items[2]])
-            puritylist.append(round(purity,4))
-    purityDict = Counter(puritylist)
-    for key in purityDict.keys():
-        sortbysupport = []
-        for (index, tlist) in enumerate(tempTopicPurityList):
-            if index < len(tempTopicPurityList) - 1:
-                current = tlist
-                if(key == current[0]):
-                    sortbysupport.append(current)
-            elif(key == tlist[0]):
-                sortbysupport.append(tlist)
-        sortbysupport = sorted(sortbysupport, key=itemgetter(1), reverse=True)
-        for items in sortbysupport:
-            finalpuritylist.append([items[0],items[2]])
-    finalpuritylist = sorted(finalpuritylist,reverse=True)
+            purtiy_support_combine = (float(purity) * math.log10(float(f_t_p)))
+            tempTopicPurityList.append([round(purity,4),purtiy_support_combine,items[2]])
+            #puritylist.append(round(purity,4))
+    #purityDict = Counter(puritylist)
+    #for key in purityDict.keys():
+    #    sortbysupport = []
+    #    for (index, tlist) in enumerate(tempTopicPurityList):
+    #        if index < len(tempTopicPurityList) - 1:
+    #            current = tlist
+    #            if(key == current[0]):
+    #                sortbysupport.append(current)
+    #        elif(key == tlist[0]):
+    #            sortbysupport.append(tlist)
+    tempTopicPurityList = sorted(tempTopicPurityList, key=itemgetter(1), reverse=True)
+    for items in tempTopicPurityList:
+        finalpuritylist.append([items[0],items[2]])
+    #finalpuritylist = sorted(finalpuritylist,reverse=True)
     func_redirecttoOutputFolder(finalpuritylist,dtList,indx,outputPurityFileName,dictVocab)
 
 # Define a func_Completeness() function which finds the completeness of the pattern.
@@ -264,9 +264,9 @@ def func_Completeness(listItemwithFreq,dt,indx,outputCompletenessFileName,dictVo
         tempcompletenessList.append([float(result), f_t_p, patternDigitObj.findall(str(item1))])
         tempsortbysupportList.append(float(result))
     tempsortbysupportList = sorted(tempsortbysupportList,reverse=True)
-    print("tempsortbysupportList",tempsortbysupportList)
+    #print("tempsortbysupportList",tempsortbysupportList)
     completenessDict = Counter(tempsortbysupportList)
-    print(completenessDict)
+    #print(completenessDict)
     for key in completenessDict.keys():
         sortbysupport = []
         for (index, tlist) in enumerate(tempcompletenessList):
@@ -277,12 +277,12 @@ def func_Completeness(listItemwithFreq,dt,indx,outputCompletenessFileName,dictVo
             elif(key == tlist[0]):
                 sortbysupport.append(tlist)
         sortbysupport = sorted(sortbysupport,key=itemgetter(1),reverse=True)
-        print(sortbysupport)
+        #print(sortbysupport)
         for items in sortbysupport:
             completenessList.append([round(items[0],4),items[2]])
-    print(completenessList)
+    #print(completenessList)
     completenessList = sorted(completenessList,key=itemgetter(0),reverse=True)
-    print(completenessList)
+    #print(completenessList)
     func_redirecttoOutputFolder(completenessList,dt,indx,outputCompletenessFileName,dictVocab)
 
 # Define a func_Phraseness() function which re-rank the frequent pattern based on phraseness.
@@ -332,7 +332,7 @@ def func_Phraseness(allTopicFreqPattern,indx,dtList,outputPhrasenessFileName,dic
         sortbysupport = sorted(sortbysupport, key=itemgetter(1), reverse=True)
         for items in sortbysupport:
             phraseness.append([items[0], items[2]])
-    phraseness = sorted(phraseness, reverse=True)
+    phraseness = sorted(phraseness,key = itemgetter(0),reverse=True)
     func_redirecttoOutputFolder(phraseness, dtList, indx, outputPhrasenessFileName, dictVocab)
 
 # Define a func_redirecttoOutputFolder() function which redirects the output to respective folder
